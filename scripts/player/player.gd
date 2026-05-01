@@ -12,6 +12,16 @@ extends CharacterBody2D
 # ── Attributes ───────────────────────────────────────────────────────────────
 @export_group("Attributes")
 @export var stamina_regen_rate: float = 20.0
+@export var sword_damage: int = 15
+@export var dodge_stamina_cost: float = 30.0
+@export var attack_stamina_cost: float = 15.0
+@export var shoot_stamina_cost: float = 20.0
+
+# ── Combat ───────────────────────────────────────────────────────────────────
+@export_group("Combat")
+@export var arrow_scene: PackedScene
+@export var dodge_speed_mult: float = 2.5
+@export var dodge_duration: float = 0.25
 
 var current_health: int:
 	set(value):
@@ -43,6 +53,10 @@ var current_stamina: float:
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var interaction_area: Area2D = $InteractionArea
 
+var _is_dodging: bool = false
+var _is_attacking: bool = false
+var _dodge_timer: float = 0.0
+
 ## Loaded once and cached for direction swaps without redundant disk access.
 var _dir_textures: Dictionary = {}
 var _last_direction := Vector2.DOWN
@@ -55,6 +69,9 @@ func _ready() -> void:
 	# Initialize from GameManager
 	current_health = GameManager.current_health
 	current_stamina = GameManager.current_stamina
+	
+	# Ensure interaction area detects enemies (Layer 4)
+	interaction_area.collision_mask |= (1 << 3) # Layer 4 is 2^3
 	
 	add_to_group(&"player")
 	_load_direction_textures()
@@ -78,9 +95,87 @@ func _physics_process(delta: float) -> void:
 
 	_invincible_timer = maxf(_invincible_timer - delta, 0.0)
 	_handle_stamina_regen(delta)
-	_handle_movement(delta)
-	_handle_interaction_input()
+	
+	if not _is_dodging:
+		_handle_combat_input()
+		_handle_movement(delta)
+		_handle_interaction_input()
+	else:
+		_process_dodge(delta)
+		
 	move_and_slide()
+
+
+func _handle_combat_input() -> void:
+	if _is_attacking:
+		return
+		
+	if Input.is_action_just_pressed("dodge") and current_stamina >= dodge_stamina_cost:
+		_start_dodge()
+	elif Input.is_action_just_pressed("attack") and current_stamina >= attack_stamina_cost:
+		_perform_sword_attack()
+	elif Input.is_action_just_pressed("shoot") and current_stamina >= shoot_stamina_cost:
+		_perform_bow_attack()
+
+
+func _start_dodge() -> void:
+	current_stamina -= dodge_stamina_cost
+	_is_dodging = true
+	_dodge_timer = dodge_duration
+	_invincible_timer = dodge_duration # I-frames during dodge
+	
+	# Visual feedback for dodge
+	var tween := create_tween()
+	tween.tween_property(sprite, "modulate:a", 0.5, 0.1)
+	tween.finished.connect(func(): sprite.modulate.a = 1.0)
+
+
+func _process_dodge(delta: float) -> void:
+	_dodge_timer -= delta
+	velocity = _last_direction * (max_speed * dodge_speed_mult)
+	if _dodge_timer <= 0.0:
+		_is_dodging = false
+		velocity = Vector2.ZERO
+
+
+func _perform_sword_attack() -> void:
+	current_stamina -= attack_stamina_cost
+	_is_attacking = true
+	
+	# Sword attack logic: check for enemies in front
+	var overlap_bodies = interaction_area.get_overlapping_bodies()
+	
+	for body in overlap_bodies:
+		if body.is_in_group(&"enemies") and body.has_method("take_damage"):
+			# Simple check if enemy is in front (based on _last_direction)
+			var to_enemy = (body.global_position - global_position).normalized()
+			if to_enemy.dot(_last_direction) > 0.3: # ~70 degrees cone
+				body.take_damage(sword_damage)
+	
+	# Visual feedback
+	var tween := create_tween()
+	tween.tween_property(sprite, "scale", Vector2(1.2, 0.8), 0.05)
+	tween.tween_property(sprite, "scale", Vector2(1.0, 1.0), 0.1)
+	tween.finished.connect(func(): _is_attacking = false)
+
+
+func _perform_bow_attack() -> void:
+	if not arrow_scene:
+		return
+		
+	current_stamina -= shoot_stamina_cost
+	_is_attacking = true
+	
+	var arrow = arrow_scene.instantiate() as Arrow
+	arrow.global_position = global_position
+	arrow.direction = _last_direction
+	get_parent().add_child(arrow)
+	
+	# Visual feedback
+	var tween := create_tween()
+	tween.tween_property(sprite, "scale", Vector2(0.8, 1.2), 0.05)
+	tween.tween_property(sprite, "scale", Vector2(1.0, 1.0), 0.1)
+	tween.finished.connect(func(): _is_attacking = false)
 
 
 func _handle_stamina_regen(delta: float) -> void:
