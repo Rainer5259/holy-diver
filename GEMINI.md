@@ -13,7 +13,7 @@
 | Priority | Feature | Branch | Status |
 |----------|---------|--------|--------|
 | P1 | Base de Atributos | `feat/p1-base-attributes` | ✅ Finished |
-| P2 | Combate e Esquiva | - | ⏳ Pending |
+| P2 | Combate e Esquiva | `feat/p2-combat-dodge` | ✅ Finished |
 | P3 | Interação de Mapa | - | ⏳ Pending |
 | P4 | Sistema de Riscos | - | ⏳ Pending |
 | P5 | Evolução (Fogueira)| - | ⏳ Pending |
