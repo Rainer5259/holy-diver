@@ -1,0 +1,24 @@
+{
+    "mcpServers": {
+      "godot": {
+        "command": "/Users/rainercordeiro/.nvm/versions/node/v20.19.4/bin/npx",
+        "args": [
+          "-y",
+          "godot-mcp",
+          "--godot-path",
+          "/Applications/Godot.app/Contents/MacOS/Godot"
+        ],
+        "env": {
+          "PATH": "/Users/rainercordeiro/.nvm/versions/node/v20.19.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+          "GODOT_PATH": "/Applications/Godot.app/Contents/MacOS/Godot"
+        }
+      },
+        "pixellab": {
+          "url": "https://api.pixellab.ai/mcp",
+          "transport": "http",
+          "headers": {
+            "Authorization": "Bearer 41acf1c6-8444-4c22-a434-895c7a489e41"
+          } 
+      }
+    }
+  }
