@@ -22,3 +22,4 @@
 | P3 | Interação de Mapa | `feat/p3-map-interaction` | ✅ Finished |
 | P4 | Sistema de Riscos | `feat/p4-hazard-system` | ✅ Finished |
 | P5 | Evolução (Fogueira)| `feat/p5-progression-system` | ✅ Finished |
+| P6 | HUD e Feedback | - | ⏳ Pending |
