@@ -227,7 +227,19 @@ func _update_facing(direction: Vector2) -> void:
 func fall_into_pit() -> void:
 	if _is_dead:
 		return
-	current_health = 0
+	
+	_is_dead = true
+	velocity = Vector2.ZERO
+	
+	# Fall animation
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(sprite, "scale", Vector2.ZERO, 0.5)
+	tween.tween_property(sprite, "rotation", TAU, 0.5)
+	tween.tween_property(sprite, "modulate:a", 0.0, 0.5)
+	
+	tween.chain().tween_callback(func():
+		current_health = 0
+	)
 
 
 ## Apply damage with brief invincibility frames.
