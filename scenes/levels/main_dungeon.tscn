@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" path="res://scenes/interactables/key_item.tscn" id="21_key_scene"]
 
 [ext_resource type="PackedScene" uid="uid://strong_goblin_01" path="res://scenes/entities/enemies/strong_goblin.tscn" id="22_strong_goblin"]
+[ext_resource type="Script" path="res://scripts/entities/fallen_knight.gd" id="23_knight_script"]
+[ext_resource type="PackedScene" uid="uid://shockwave_01" path="res://scenes/entities/shockwave.tscn" id="24_shock_scene"]
 
 [sub_resource type="CircleShape2D" id="PlayerCollision"]
 radius = 5.0
@@ -321,18 +323,21 @@ shape = SubResource("EnemyAttackShape")
 [node name="StrongGoblin_01" parent="Enemies" instance=ExtResource("22_strong_goblin")]
 position = Vector2(80, 300)
 
-[node name="Boss" type="CharacterBody2D" parent="Enemies"]
+[node name="Boss" type="CharacterBody2D" parent="Enemies" groups=["boss", "enemies"]]
 position = Vector2(312, 384)
 collision_layer = 8
 collision_mask = 5
 motion_mode = 1
-script = ExtResource("4_boss_script")
-max_health = 200
-move_speed = 45.0
-attack_damage = 25
+script = ExtResource("23_knight_script")
+max_health = 250
+move_speed = 40.0
+attack_damage = 30
 detection_range = 200.0
-attack_range = 36.0
+attack_range = 45.0
 key_scene = ExtResource("21_key_scene")
+shockwave_scene = ExtResource("24_shock_scene")
+shockwave_count = 3
+telegraph_duration = 1.5
 
 [node name="Sprite2D" type="Sprite2D" parent="Enemies/Boss"]
 texture = ExtResource("14_boss_tex")

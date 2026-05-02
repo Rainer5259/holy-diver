@@ -35,12 +35,16 @@
 | S3.1 | Menu da Fogueira | `feat/s3-bonfire-ui` | ✅ Finished |
 | S3.2 | Pulo Automático | `feat/s3-auto-jump` | ✅ Finished |
 | S3.3 | Sistema de Munição | `feat/s3-ammo-system` | ✅ Finished |
+| S3.4 | IA do Primeiro Boss | `feat/s3-boss-fallen-knight` | ✅ Finished |
 
-## S3.3: Sistema de Munição - Detalhes Técnicos
-- **Munição Limitada**: O arco agora consome flechas (`current_arrows`). O limite padrão é 15.
-- **GameManager**: Adicionado rastreio de flechas com persistência no save.
-- **HUD**: Novo contador visual de flechas adicionado ao lado de moedas e chaves.
-- **Loot**: Criado `ArrowPickup.tscn`. Inimigos e caixas agora têm chance de dropar flechas para reabastecimento.
+## S3.4: IA do Primeiro Boss (O Cavaleiro Caído) - Detalhes Técnicos
+- **FallenKnight.gd**: Nova classe que estende `Boss`. Implementa ataques pesados com 1.5s de aviso visual (telegraph).
+- **Ataques**: 
+    - **Esmagamento Frontal**: Dano alto em curta distância.
+    - **Ondas de Choque**: Dispara 3 (ou mais na Fase 2) projéteis em leque após o telegraph.
+- **Telegraph**: O boss pisca em vermelho e treme durante 1.5s antes de atacar, ensinando o jogador a usar a esquiva no momento certo.
+- **Shockwave.tscn**: Projétil mágico que atravessa o cenário e causa dano ao jogador.
+- **Integração**: Boss atualizado no mapa com novos atributos (250 HP, 30 Dano).
 
 ## S3.2: Pulo Automático - Detalhes Técnicos
 - **Player.gd**: Implementada a lógica de "Pulo Automático" em `fall_into_pit`.
