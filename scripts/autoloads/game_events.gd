@@ -14,6 +14,7 @@ signal entrance_closed(entrance_id: StringName)
 signal key_collected()
 signal chest_opened(chest_id: StringName)
 signal object_broken(object_id: StringName)
+signal bonfire_rested()
 
 ## Enemy signals
 signal enemy_died(enemy: Node2D)
