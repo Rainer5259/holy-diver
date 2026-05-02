@@ -13,6 +13,7 @@ extends CharacterBody2D
 @export_group("Attributes")
 @export var stamina_regen_rate: float = 20.0
 @export var sword_damage: int = 15
+@export var sword_cooldown: float = 0.4
 @export var dodge_stamina_cost: float = 30.0
 @export var attack_stamina_cost: float = 15.0
 @export var shoot_stamina_cost: float = 20.0
@@ -25,23 +26,24 @@ extends CharacterBody2D
 
 var current_health: int:
 	set(value):
-		current_health = clampi(value, 0, GameManager.max_health)
-		GameManager.current_health = current_health
-		GameEvents.player_health_changed.emit(current_health, GameManager.max_health)
-		if current_health == 0:
-			_die()
+		var new_health = clampi(value, 0, GameManager.max_health)
+		if GameManager.current_health != new_health:
+			GameManager.current_health = new_health
+			GameEvents.player_health_changed.emit(new_health, GameManager.max_health)
+			if new_health == 0:
+				_die()
 	get:
 		return GameManager.current_health
 
 var current_stamina: float:
 	set(value):
-		var old_stamina = current_stamina
-		current_stamina = clampf(value, 0.0, GameManager.max_stamina)
-		GameManager.current_stamina = current_stamina
-		GameEvents.player_stamina_changed.emit(current_stamina, GameManager.max_stamina)
-		
-		if current_stamina <= 0.0 and old_stamina > 0.0:
-			GameEvents.player_stamina_depleted.emit()
+		var old_stamina = GameManager.current_stamina
+		var new_stamina = clampf(value, 0.0, GameManager.max_stamina)
+		if old_stamina != new_stamina:
+			GameManager.current_stamina = new_stamina
+			GameEvents.player_stamina_changed.emit(new_stamina, GameManager.max_stamina)
+			if new_stamina <= 0.0 and old_stamina > 0.0:
+				GameEvents.player_stamina_depleted.emit()
 	get:
 		return GameManager.current_stamina
 
@@ -56,6 +58,7 @@ var current_stamina: float:
 var _is_dodging: bool = false
 var _is_attacking: bool = false
 var _dodge_timer: float = 0.0
+var _attack_timer: float = 0.0
 
 ## Loaded once and cached for direction swaps without redundant disk access.
 var _dir_textures: Dictionary = {}
@@ -66,15 +69,11 @@ const INVINCIBLE_DURATION := 0.5
 
 
 func _ready() -> void:
-	# Initialize from GameManager
-	current_health = GameManager.current_health
-	current_stamina = GameManager.current_stamina
-	
-	# Ensure interaction area detects enemies (Layer 4)
-	interaction_area.collision_mask |= (1 << 3) # Layer 4 is 2^3
-	
 	add_to_group(&"player")
 	_load_direction_textures()
+	
+	# The attributes are already in GameManager, no need to re-initialize local vars
+	# as they use getters/setters that point to GameManager.
 
 
 func _load_direction_textures() -> void:
@@ -94,6 +93,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_invincible_timer = maxf(_invincible_timer - delta, 0.0)
+	_attack_timer = maxf(_attack_timer - delta, 0.0)
 	_handle_stamina_regen(delta)
 	
 	if not _is_dodging:
@@ -107,7 +107,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _handle_combat_input() -> void:
-	if _is_attacking:
+	if _is_attacking or _attack_timer > 0.0:
 		return
 		
 	if Input.is_action_just_pressed("dodge") and current_stamina >= dodge_stamina_cost:
@@ -141,6 +141,7 @@ func _process_dodge(delta: float) -> void:
 func _perform_sword_attack() -> void:
 	current_stamina -= attack_stamina_cost
 	_is_attacking = true
+	_attack_timer = sword_cooldown
 	
 	# Sword attack logic: check for enemies in front
 	var overlap_bodies = interaction_area.get_overlapping_bodies()
@@ -151,6 +152,8 @@ func _perform_sword_attack() -> void:
 			var to_enemy = (body.global_position - global_position).normalized()
 			if to_enemy.dot(_last_direction) > 0.3: # ~70 degrees cone
 				body.take_damage(sword_damage)
+		elif body is Crate:
+			body.take_damage(sword_damage)
 	
 	# Visual feedback
 	var tween := create_tween()
@@ -161,10 +164,12 @@ func _perform_sword_attack() -> void:
 
 func _perform_bow_attack() -> void:
 	if not arrow_scene:
+		_is_attacking = false
 		return
 		
 	current_stamina -= shoot_stamina_cost
 	_is_attacking = true
+	_attack_timer = sword_cooldown # Share cooldown for now
 	
 	var arrow = arrow_scene.instantiate() as Arrow
 	arrow.global_position = global_position
@@ -179,7 +184,7 @@ func _perform_bow_attack() -> void:
 
 
 func _handle_stamina_regen(delta: float) -> void:
-	if current_stamina < GameManager.max_stamina:
+	if not _is_dodging and not _is_attacking and current_stamina < GameManager.max_stamina:
 		current_stamina += stamina_regen_rate * delta
 
 

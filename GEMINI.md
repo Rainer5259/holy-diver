@@ -23,9 +23,11 @@
 | P4 | Sistema de Riscos | `feat/p4-hazard-system` | ✅ Finished |
 | P5 | Evolução (Fogueira)| `feat/p5-progression-system` | ✅ Finished |
 | P6 | HUD e Feedback | `feat/p6-hud-feedback` | ✅ Finished |
+| P7 | Recheck e Refinamento | `fix/system-refinements` | ✅ Finished |
 
-## P6: HUD e Feedback - Detalhes Técnicos
-- **StaminaBar.gd**: Criada lógica para barra de estamina com sinal visual de esgotamento (flash vermelho).
-- **HealthBar.gd**: Validada lógica existente de "bleed effect" (barra de dano que segue a vida).
-- **Feedback Visual**: Implementados sinais visuais para cura, dano e upgrades nas fogueiras via Tweens.
+## P7: Recheck e Refinamento - Detalhes Técnicos
+- **Player.gd**: Refatorados getters/setters de atributos para evitar recursão infinita e garantir sincronia com `GameManager`.
+- **Combate**: Adicionado `sword_cooldown` para evitar spam de ataques.
+- **Interação**: Corrigida detecção de `Crate` no ataque de espada.
+- **Estamina**: Bloqueada regeneração durante esquiva e ataque para maior peso tático.
 
