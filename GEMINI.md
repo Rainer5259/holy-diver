@@ -36,6 +36,28 @@
 | S3.2 | Pulo Automático | `feat/s3-auto-jump` | ✅ Finished |
 | S3.3 | Sistema de Munição | `feat/s3-ammo-system` | ✅ Finished |
 | S3.4 | IA do Primeiro Boss | `feat/s3-boss-fallen-knight` | ✅ Finished |
+| S4.1 | Design de Nível Final | `feat/s4-level-design` | ✅ Finished |
+| S4.2 | Ajustes de Balanceamento | `feat/s4-final-balancing` | ✅ Finished |
+
+## S4.2: Ajustes Finais de Balanceamento - Detalhes Técnicos
+- **Inimigos**: 
+    - **Goblin**: HP aumentado para 40, Dano aumentado para 15.
+    - **StrongGoblin**: HP aumentado para 100, Dano aumentado para 25.
+- **Player**:
+    - **Estamina**: Taxa de regeneração aumentada para 25.0/s.
+    - **Custos**: Esquiva reduzida para 25, Ataque para 12 e Tiro para 18, tornando o combate mais fluido.
+- **Economia (Fogueira)**:
+    - Implementado **Escalonamento de Custos**: O preço base de 50 moedas agora aumenta em 25 moedas para cada upgrade adquirido de Vida ou Estamina.
+- **Boss (Fallen Knight)**:
+    - **Dificuldade**: HP aumentado para 300 para um desafio mais duradouro.
+    - **Telegraph**: Tempo de aviso reduzido de 1.5s para 1.3s, exigindo reflexos mais apurados mas mantendo a justiça.
+
+## S4.1: Design de Nível Final do Andar 1 - Detalhes Técnicos
+- **Expansão de Mapa**: O mapa `main_dungeon.tscn` foi expandido com três novas áreas estratégicas para aumentar a complexidade e exploração.
+- **Sala de Emboscada (Noroeste)**: Localizada em `(-200, 150)`, contém 4 Goblins posicionados para cercar o jogador ao entrar.
+- **Área de Transição (Norte)**: Localizada em `(150, -100)`, apresenta um desafio de plataforma com armadilhas de espinhos (`Spike_Transition`) e buracos (`Pitfall_Transition`), exigindo o uso da mecânica de pulo automático.
+- **Sala de Tesouro Escondida (Leste)**: Localizada em `(600, 100)`, protegida por uma porta mecânica (`Door_Treasure`) operada por uma alavanca (`Lever_Treasure`). Contém dois baús de recompensa e um `StrongGoblin` adicional como guarda.
+- **NavigationRegion2D**: A área de navegação foi validada para cobrir todas as novas coordenadas, garantindo que a IA dos inimigos possa perseguir o jogador em qualquer ponto do mapa expandido.
 
 ## S3.4: IA do Primeiro Boss (O Cavaleiro Caído) - Detalhes Técnicos
 - **FallenKnight.gd**: Nova classe que estende `Boss`. Implementa ataques pesados com 1.5s de aviso visual (telegraph).

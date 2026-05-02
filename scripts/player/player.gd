@@ -11,12 +11,12 @@ extends CharacterBody2D
 
 # ── Attributes ───────────────────────────────────────────────────────────────
 @export_group("Attributes")
-@export var stamina_regen_rate: float = 20.0
+@export var stamina_regen_rate: float = 25.0
 @export var sword_damage: int = 15
 @export var sword_cooldown: float = 0.4
-@export var dodge_stamina_cost: float = 30.0
-@export var attack_stamina_cost: float = 15.0
-@export var shoot_stamina_cost: float = 20.0
+@export var dodge_stamina_cost: float = 25.0
+@export var attack_stamina_cost: float = 12.0
+@export var shoot_stamina_cost: float = 18.0
 @export var auto_jump_stamina_cost: float = 10.0
 
 # ── Combat ───────────────────────────────────────────────────────────────────

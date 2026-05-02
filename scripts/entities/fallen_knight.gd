@@ -4,7 +4,7 @@ class_name FallenKnight
 extends Boss
 
 @export_group("Fallen Knight")
-@export var telegraph_duration: float = 1.5
+@export var telegraph_duration: float = 1.3
 @export var shockwave_scene: PackedScene
 @export var shockwave_count: int = 3
 
@@ -14,7 +14,7 @@ var _is_telegraphing: bool = false
 func _ready() -> void:
 	super._ready()
 	# Fallen Knight specific stats
-	max_health = 250
+	max_health = 300
 	current_health = max_health
 	move_speed = 40.0
 	attack_damage = 30

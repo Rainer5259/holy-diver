@@ -5,9 +5,9 @@ extends CharacterBody2D
 
 # ── Stats ─────────────────────────────────────────────────────────────────────
 @export_group("Stats")
-@export var max_health: int = 30
+@export var max_health: int = 40
 @export var move_speed: float = 55.0
-@export var attack_damage: int = 10
+@export var attack_damage: int = 15
 @export var attack_cooldown: float = 1.2
 @export var detection_range: float = 120.0
 @export var attack_range: float = 28.0

@@ -12,10 +12,10 @@ var _nav_timer: float = 0.0
 func _ready() -> void:
 	super._ready()
 	# Strong enemies have more health
-	max_health = 80
+	max_health = 100
 	current_health = max_health
 	move_speed = 65.0
-	attack_damage = 20
+	attack_damage = 25
 	coin_drop_count = 5
 
 
