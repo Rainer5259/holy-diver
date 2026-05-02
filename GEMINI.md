@@ -9,6 +9,9 @@
     - `fix/`: Bug fixes.
 - **Commits**: Use descriptive messages following the `type: description` pattern.
 
+## Safety & Security
+- **Destructive Commands**: AI Agents are prohibited from using commands like `git clean -fdX`, `git reset --hard` (without confirmation), or `rm -rf` on critical directories. See [AGENTS.md](./AGENTS.md) for full safety protocols.
+
 ## Feature Tracking
 | Priority | Feature | Branch | Status |
 |----------|---------|--------|--------|
