@@ -23,6 +23,8 @@
 [ext_resource type="TileSet" uid="uid://dungeon_tileset" path="res://resources/tilesets/dungeon_tileset.tres" id="20_tileset"]
 [ext_resource type="PackedScene" path="res://scenes/interactables/key_item.tscn" id="21_key_scene"]
 
+[ext_resource type="PackedScene" uid="uid://strong_goblin_01" path="res://scenes/entities/enemies/strong_goblin.tscn" id="22_strong_goblin"]
+
 [sub_resource type="CircleShape2D" id="PlayerCollision"]
 radius = 5.0
 
@@ -48,9 +50,9 @@ size = Vector2(28, 28)
 size = Vector2(28, 28)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_dungeon"]
-vertices = PackedVector2Array(0, 0, 1000, 0, 1000, 1000, 0, 1000)
+vertices = PackedVector2Array(-500, -500, 2000, -500, 2000, 2000, -500, 2000)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1000, 0, 1000, 1000, 0, 1000)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-500, -500, 2000, -500, 2000, 2000, -500, 2000)])
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 10.0
 
@@ -315,6 +317,9 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_03/AttackArea"]
 shape = SubResource("EnemyAttackShape")
+
+[node name="StrongGoblin_01" parent="Enemies" instance=ExtResource("22_strong_goblin")]
+position = Vector2(80, 300)
 
 [node name="Boss" type="CharacterBody2D" parent="Enemies"]
 position = Vector2(312, 384)

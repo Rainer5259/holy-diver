@@ -31,6 +31,11 @@
 | S2.1 | Drop de Moedas | `feat/s2-coin-drop` | ✅ Finished |
 | S2.2 | Contadores na HUD | `feat/s2-hud-counters` | ✅ Finished |
 | S2.3 | IA de Mobs Fortes | `feat/s2-strong-mob-ai` | ✅ Finished |
+| S2.4 | Polimento e Mapa | `feat/s2-final-polish` | ✅ Finished |
+
+## S2.4: Polimento e Mapa - Detalhes Técnicos
+- **Navigation**: Área de navegação expandida para cobrir todo o mapa de teste (2500x2500px).
+- **Mapa**: Instanciado o primeiro `StrongGoblin` no corredor oeste para validação imediata do sistema de IA.
 
 ## S2.3: IA de Mobs Fortes - Detalhes Técnicos
 - **StrongEnemy.gd**: Nova classe que herda de `Enemy` e integra `NavigationAgent2D` para pathfinding inteligente.
