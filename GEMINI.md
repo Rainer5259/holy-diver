@@ -14,6 +14,6 @@
 |----------|---------|--------|--------|
 | P1 | Base de Atributos | `feat/p1-base-attributes` | ✅ Finished |
 | P2 | Combate e Esquiva | `feat/p2-combat-dodge` | ✅ Finished |
-| P3 | Interação de Mapa | - | ⏳ Pending |
+| P3 | Interação de Mapa | `feat/p3-map-interaction` | ✅ Finished |
 | P4 | Sistema de Riscos | - | ⏳ Pending |
 | P5 | Evolução (Fogueira)| - | ⏳ Pending |
