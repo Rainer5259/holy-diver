@@ -12,12 +12,19 @@ var _is_open: bool = false
 
 func _ready() -> void:
 	GameEvents.entrance_opened.connect(_on_entrance_opened)
+	GameEvents.entrance_closed.connect(_on_entrance_closed)
 
 
 func _on_entrance_opened(id: StringName) -> void:
 	if id != entrance_id or _is_open:
 		return
 	_open()
+
+
+func _on_entrance_closed(id: StringName) -> void:
+	if id != entrance_id or not _is_open:
+		return
+	_close()
 
 
 func _open() -> void:
@@ -27,3 +34,12 @@ func _open() -> void:
 	var tween := create_tween()
 	tween.tween_property(sprite, "modulate:a", 0.0, 0.5)
 	tween.tween_callback(func() -> void: sprite.visible = false)
+
+
+func _close() -> void:
+	_is_open = false
+	sprite.visible = true
+	collision.set_deferred("disabled", false)
+
+	var tween := create_tween()
+	tween.tween_property(sprite, "modulate:a", 1.0, 0.5)

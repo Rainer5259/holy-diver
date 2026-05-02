@@ -27,3 +27,5 @@ func _on_interact(_instigator: Node2D) -> void:
 
 	if _activated:
 		GameEvents.entrance_opened.emit(entrance_id)
+	else:
+		GameEvents.entrance_closed.emit(entrance_id)
