@@ -27,6 +27,25 @@
 | P8 | Fix: GameManager Vars | `fix/gamemanager-missing-vars` | ✅ Finished |
 | P9 | Config: Godot MCP | `chore/configure-godot-mcp` | ✅ Finished |
 | P10 | Fix: Startup e Tileset | `fix/tileset-and-signals` | ✅ Finished |
+| P11 | Fix: Respawn e Objetivos | `fix/respawn-and-objectives` | ✅ Finished |
+
+## P11: Fix: Respawn e Objetivos - Detalhes Técnicos
+- **Player.gd**: Implementada lógica de reset de cena (`reload_current_scene`) após a animação de morte, garantindo que o jogador possa tentar novamente.
+- **Objetivo do Jogo**: Documentado o fluxo principal de gameplay para clareza do usuário.
+
+## Objetivo do Jogo (Holy Diver)
+O objetivo principal é explorar a masmorra, superar perigos e derrotar o Boss final.
+1. **Exploração**: O jogador começa em uma área segura e deve navegar pelos corredores.
+2. **Ativação de Mecanismos**: Encontre alavancas para abrir portas trancadas (como a `Entrance Door 1`).
+3. **Coleta de Itens**: Derrote o Boss para obter a **Key** (Chave) que abre baús especiais.
+4. **Combate**: Use sua espada (`J` ou `LMB`), arco (`K` ou `RMB`) e esquiva (`Espaço`) para sobreviver.
+5. **Progressão**: Use fogueiras para salvar seu progresso e melhorar seus atributos.
+
+### Como interagir com Alavancas/Baús:
+1. Aproxime-se do objeto até estar dentro do raio de interação.
+2. Pressione a tecla **E** ou **F** para interagir.
+3. Se for uma alavanca, ela mudará de estado (Ligada/Desligada) e emitirá um sinal para abrir/fechar portas vinculadas.
+4. Se for um baú trancado, você precisará da Chave no inventário (obtida ao derrotar o Boss).
 
 ## P10: Fix: Startup e Tileset - Detalhes Técnicos
 - **dungeon_tileset.tres**: Corrigida estrutura do recurso que tentava instanciar uma classe inexistente (`PhysicsLayer`), movendo as propriedades de física diretamente para o recurso principal do TileSet.

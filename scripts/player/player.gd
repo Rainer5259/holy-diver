@@ -270,4 +270,8 @@ func _die() -> void:
 	GameEvents.player_died.emit()
 	var tween := create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 1.5)
-	tween.tween_callback(queue_free)
+	# Reset scene after death delay
+	tween.tween_callback(func():
+		GameManager.reset_attributes()
+		get_tree().reload_current_scene()
+	)
