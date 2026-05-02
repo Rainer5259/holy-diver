@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3 uid="uid://strong_goblin_01"]
+
+[ext_resource type="Script" path="res://scripts/entities/strong_enemy.gd" id="1_strong_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss_south.png" id="2_strong_tex"]
+
+[sub_resource type="CircleShape2D" id="StrongEnemyCollision"]
+radius = 7.0
+
+[sub_resource type="CircleShape2D" id="StrongDetectionShape"]
+radius = 160.0
+
+[sub_resource type="CircleShape2D" id="StrongAttackShape"]
+radius = 32.0
+
+[node name="StrongGoblin" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("1_strong_script")
+max_health = 80
+move_speed = 65.0
+attack_damage = 20
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.615686, 0.615686, 1)
+texture = ExtResource("2_strong_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+shape = SubResource("StrongEnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("StrongDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("StrongAttackShape")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 15.0
+target_desired_distance = 25.0
+path_max_distance = 100.0
+avoidance_enabled = true
+radius = 10.0
+neighbor_distance = 100.0
+max_speed = 65.0
+debug_enabled = false

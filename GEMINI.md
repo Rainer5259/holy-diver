@@ -30,11 +30,12 @@
 | P11 | Fix: Respawn e Objetivos | `fix/respawn-and-objectives` | ✅ Finished |
 | S2.1 | Drop de Moedas | `feat/s2-coin-drop` | ✅ Finished |
 | S2.2 | Contadores na HUD | `feat/s2-hud-counters` | ✅ Finished |
+| S2.3 | IA de Mobs Fortes | `feat/s2-strong-mob-ai` | ✅ Finished |
 
-## S2.2: Contadores na HUD - Detalhes Técnicos
-- **GameManager**: Adicionada lógica de rastreio de chaves (`keys`) com emissão de sinais automática.
-- **HUD (HealthBar.gd)**: Expandido para exibir contadores de moedas e chaves em tempo real.
-- **Interactables**: Atualizados `KeyItem.gd` e `Chest.gd` para utilizar o sistema centralizado de chaves no `GameManager`.
+## S2.3: IA de Mobs Fortes - Detalhes Técnicos
+- **StrongEnemy.gd**: Nova classe que herda de `Enemy` e integra `NavigationAgent2D` para pathfinding inteligente.
+- **StrongGoblin.tscn**: Novo inimigo com atributos elevados (HP, Dano) e visual diferenciado.
+- **Navegação**: Adicionada `NavigationRegion2D` ao mapa principal para suportar o novo sistema de busca de caminho da IA.
 
 ## P11: Fix: Respawn e Objetivos - Detalhes Técnicos
 - **Player.gd**: Implementada lógica de reset de cena (`reload_current_scene`) após a animação de morte, garantindo que o jogador possa tentar novamente.

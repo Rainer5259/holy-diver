@@ -47,18 +47,28 @@ size = Vector2(28, 28)
 [sub_resource type="RectangleShape2D" id="PitShape"]
 size = Vector2(28, 28)
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_dungeon"]
+vertices = PackedVector2Array(0, 0, 1000, 0, 1000, 1000, 0, 1000)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1000, 0, 1000, 1000, 0, 1000)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+agent_radius = 10.0
+
 [node name="MainDungeon" type="Node2D"]
 y_sort_enabled = true
 
-[node name="Base_Floor" type="TileMapLayer" parent="."]
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_dungeon")
+
+[node name="Base_Floor" type="TileMapLayer" parent="NavigationRegion2D"]
 z_index = -1
 tile_set = ExtResource("20_tileset")
 
-[node name="Walls" type="TileMapLayer" parent="."]
+[node name="Walls" type="TileMapLayer" parent="NavigationRegion2D"]
 y_sort_enabled = true
 tile_set = ExtResource("20_tileset")
 
-[node name="Hazards" type="TileMapLayer" parent="."]
+[node name="Hazards" type="TileMapLayer" parent="NavigationRegion2D"]
 y_sort_enabled = true
 tile_set = ExtResource("20_tileset")
 
