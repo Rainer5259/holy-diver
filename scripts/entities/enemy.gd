@@ -17,6 +17,8 @@ extends CharacterBody2D
 ## Optional scene to instantiate when this enemy dies.
 @export var drop_scene: PackedScene = preload("res://scenes/interactables/coin.tscn")
 @export var coin_drop_count: int = 1
+@export var arrow_drop_chance: float = 0.3
+@export var arrow_scene: PackedScene = preload("res://scenes/interactables/arrow_pickup.tscn")
 
 # ── Internals ─────────────────────────────────────────────────────────────────
 @onready var sprite: Sprite2D = $Sprite2D
@@ -156,6 +158,11 @@ func _die() -> void:
 			var drop := drop_scene.instantiate() as Node2D
 			get_parent().add_child(drop)
 			drop.global_position = global_position
+			
+	if randf() < arrow_drop_chance and arrow_scene:
+		var arrows := arrow_scene.instantiate() as Node2D
+		get_parent().add_child(arrows)
+		arrows.global_position = global_position
 
 	var tween := create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.8)

@@ -5,6 +5,8 @@ extends Interactable
 @export_group("Crate")
 @export var loot_scene: PackedScene = preload("res://scenes/interactables/coin.tscn")
 @export var loot_count: int = 3
+@export var arrow_drop_chance: float = 0.5
+@export var arrow_scene: PackedScene = preload("res://scenes/interactables/arrow_pickup.tscn")
 @export var is_breakable: bool = true
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -32,6 +34,11 @@ func _spawn_loot() -> void:
 			var loot = loot_scene.instantiate() as Node2D
 			get_parent().add_child(loot)
 			loot.global_position = global_position
+			
+	if randf() < arrow_drop_chance and arrow_scene:
+		var arrows = arrow_scene.instantiate() as Node2D
+		get_parent().add_child(arrows)
+		arrows.global_position = global_position
 	
 	GameEvents.object_broken.emit(interactable_id)
 	queue_free()

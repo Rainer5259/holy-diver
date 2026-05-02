@@ -34,6 +34,13 @@
 | S2.4 | Polimento e Mapa | `feat/s2-final-polish` | ✅ Finished |
 | S3.1 | Menu da Fogueira | `feat/s3-bonfire-ui` | ✅ Finished |
 | S3.2 | Pulo Automático | `feat/s3-auto-jump` | ✅ Finished |
+| S3.3 | Sistema de Munição | `feat/s3-ammo-system` | ✅ Finished |
+
+## S3.3: Sistema de Munição - Detalhes Técnicos
+- **Munição Limitada**: O arco agora consome flechas (`current_arrows`). O limite padrão é 15.
+- **GameManager**: Adicionado rastreio de flechas com persistência no save.
+- **HUD**: Novo contador visual de flechas adicionado ao lado de moedas e chaves.
+- **Loot**: Criado `ArrowPickup.tscn`. Inimigos e caixas agora têm chance de dropar flechas para reabastecimento.
 
 ## S3.2: Pulo Automático - Detalhes Técnicos
 - **Player.gd**: Implementada a lógica de "Pulo Automático" em `fall_into_pit`.

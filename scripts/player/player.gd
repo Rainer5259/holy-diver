@@ -164,10 +164,11 @@ func _perform_sword_attack() -> void:
 
 
 func _perform_bow_attack() -> void:
-	if not arrow_scene:
+	if not arrow_scene or GameManager.current_arrows <= 0:
 		_is_attacking = false
 		return
 		
+	GameManager.current_arrows -= 1
 	current_stamina -= shoot_stamina_cost
 	_is_attacking = true
 	_attack_timer = sword_cooldown # Share cooldown for now

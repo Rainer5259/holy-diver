@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var damage_bar: ProgressBar = $MarginContainer/VBoxContainer/DamageBar
 @onready var coin_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/CoinLabel
 @onready var key_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/KeyLabel
+@onready var arrow_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/ArrowLabel
 
 
 func _ready() -> void:
@@ -13,10 +14,12 @@ func _ready() -> void:
 	GameEvents.player_died.connect(_on_player_died)
 	GameEvents.coins_changed.connect(_on_coins_changed)
 	GameEvents.keys_changed.connect(_on_keys_changed)
+	GameEvents.arrows_changed.connect(_on_arrows_changed)
 	
 	# Initial values
 	_on_coins_changed(GameManager.coins)
 	_on_keys_changed(GameManager.keys)
+	_on_arrows_changed(GameManager.current_arrows)
 
 
 func _on_coins_changed(new_amount: int) -> void:
@@ -27,6 +30,11 @@ func _on_coins_changed(new_amount: int) -> void:
 func _on_keys_changed(new_amount: int) -> void:
 	if key_label:
 		key_label.text = "Chaves: " + str(new_amount)
+
+
+func _on_arrows_changed(new_amount: int) -> void:
+	if arrow_label:
+		arrow_label.text = "Flechas: " + str(new_amount)
 
 
 func _on_health_changed(current: int, maximum: int) -> void:

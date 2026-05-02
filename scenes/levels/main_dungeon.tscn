@@ -418,3 +418,7 @@ text = "Moedas: 0"
 [node name="KeyLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Chaves: 0"
+
+[node name="ArrowLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Flechas: 15"
