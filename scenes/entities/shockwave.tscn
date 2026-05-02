@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://shockwave_01"]
+
+[ext_resource type="Script" path="res://scripts/entities/shockwave.gd" id="1_shock_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/interactables/key.png" id="2_shock_tex"]
+
+[sub_resource type="RectangleShape2D" id="ShockwaveShape"]
+size = Vector2(24, 32)
+
+[node name="Shockwave" type="Area2D"]
+collision_layer = 16
+collision_mask = 3
+script = ExtResource("1_shock_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.8, 0.4, 1, 0.8)
+rotation = 1.5708
+scale = Vector2(1.5, 2.0)
+texture = ExtResource("2_shock_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("ShockwaveShape")

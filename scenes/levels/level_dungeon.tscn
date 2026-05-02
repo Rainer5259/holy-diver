@@ -1,0 +1,99 @@
+[gd_scene load_steps=7 format=3 uid="uid://dungeon_level_01"]
+
+[ext_resource type="TileSet" uid="uid://dungeon_tileset" path="res://resources/tilesets/dungeon_tileset.tres" id="1_tileset"]
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="2_player_script"]
+[ext_resource type="Script" path="res://scripts/camera/player_camera.gd" id="3_camera_script"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_player"]
+radius = 5.0
+
+[sub_resource type="RectangleShape2D" id="RectShape2D_statue"]
+size = Vector2(14, 10)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pot"]
+radius = 5.0
+
+[node name="Level_Dungeon" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Base_Floor" type="TileMapLayer" parent="."]
+z_index = -1
+tile_set = ExtResource("1_tileset")
+
+[node name="Walls_Decor" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("1_tileset")
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Statue" type="StaticBody2D" parent="Props"]
+position = Vector2(80, 48)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Statue"]
+position = Vector2(0, 4)
+shape = SubResource("RectShape2D_statue")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Statue"]
+
+[node name="Pot_Left" type="StaticBody2D" parent="Props"]
+position = Vector2(24, 168)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Pot_Left"]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_pot")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Pot_Left"]
+
+[node name="Pot_Right" type="StaticBody2D" parent="Props"]
+position = Vector2(40, 168)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Pot_Right"]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_pot")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Pot_Right"]
+
+[node name="Chest_01" type="StaticBody2D" parent="Props"]
+position = Vector2(216, 56)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Chest_01"]
+position = Vector2(0, 4)
+shape = SubResource("RectShape2D_statue")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Chest_01"]
+
+[node name="Chest_02" type="StaticBody2D" parent="Props"]
+position = Vector2(232, 72)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Chest_02"]
+position = Vector2(0, 4)
+shape = SubResource("RectShape2D_statue")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Chest_02"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(128, 120)
+collision_layer = 2
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("2_player_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 6)
+shape = SubResource("CircleShape2D_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+script = ExtResource("3_camera_script")

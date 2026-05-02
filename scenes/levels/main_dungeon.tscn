@@ -1,0 +1,686 @@
+[gd_scene load_steps=31 format=3 uid="uid://main_dungeon_01"]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player_script"]
+[ext_resource type="Script" path="res://scripts/camera/player_camera.gd" id="2_camera_script"]
+[ext_resource type="Script" path="res://scripts/entities/enemy.gd" id="3_enemy_script"]
+[ext_resource type="Script" path="res://scripts/entities/boss.gd" id="4_boss_script"]
+[ext_resource type="Script" path="res://scripts/interactables/lever.gd" id="5_lever_script"]
+[ext_resource type="Script" path="res://scripts/interactables/chest.gd" id="6_chest_script"]
+[ext_resource type="Script" path="res://scripts/interactables/entrance_door.gd" id="8_door_script"]
+[ext_resource type="Script" path="res://scripts/traps/trap.gd" id="9_trap_script"]
+[ext_resource type="Script" path="res://scripts/traps/pitfall.gd" id="10_pitfall_script"]
+[ext_resource type="Script" path="res://scripts/ui/health_bar.gd" id="11_hud_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/south.png" id="12_player_tex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/goblin_south.png" id="13_goblin_tex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss_south.png" id="14_boss_tex"]
+[ext_resource type="Texture2D" path="res://assets/sprites/interactables/lever_off.png" id="15_lever_off"]
+[ext_resource type="Texture2D" path="res://assets/sprites/interactables/chest_closed.png" id="16_chest_closed"]
+[ext_resource type="Texture2D" path="res://assets/sprites/interactables/chest_open.png" id="16b_chest_open"]
+[ext_resource type="Texture2D" path="res://assets/sprites/interactables/lever_on.png" id="15b_lever_on"]
+[ext_resource type="Texture2D" path="res://assets/sprites/traps/spike_idle.png" id="18_spike_idle"]
+[ext_resource type="Texture2D" path="res://assets/sprites/traps/spike_active.png" id="18b_spike_active"]
+[ext_resource type="Texture2D" path="res://assets/sprites/traps/pitfall.png" id="19_pitfall_tex"]
+[ext_resource type="TileSet" uid="uid://dungeon_tileset" path="res://resources/tilesets/dungeon_tileset.tres" id="20_tileset"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/key_item.tscn" id="21_key_scene"]
+
+[ext_resource type="PackedScene" uid="uid://strong_goblin_01" path="res://scenes/entities/enemies/strong_goblin.tscn" id="22_strong_goblin"]
+[ext_resource type="Script" path="res://scripts/entities/fallen_knight.gd" id="23_knight_script"]
+[ext_resource type="PackedScene" uid="uid://shockwave_01" path="res://scenes/entities/shockwave.tscn" id="24_shock_scene"]
+
+[sub_resource type="CircleShape2D" id="PlayerCollision"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="PlayerInteractionShape"]
+radius = 40.0
+
+[sub_resource type="CircleShape2D" id="EnemyDetectionShape"]
+radius = 120.0
+
+[sub_resource type="CircleShape2D" id="EnemyAttackShape"]
+radius = 28.0
+
+[sub_resource type="CircleShape2D" id="EnemyCollision"]
+radius = 5.0
+
+[sub_resource type="RectangleShape2D" id="PropShape"]
+size = Vector2(14, 10)
+
+[sub_resource type="RectangleShape2D" id="TrapShape"]
+size = Vector2(28, 28)
+
+[sub_resource type="RectangleShape2D" id="PitShape"]
+size = Vector2(28, 28)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_dungeon"]
+vertices = PackedVector2Array(-500, -500, 2000, -500, 2000, 2000, -500, 2000)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-500, -500, 2000, -500, 2000, 2000, -500, 2000)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+agent_radius = 10.0
+
+[node name="MainDungeon" type="Node2D"]
+y_sort_enabled = true
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_dungeon")
+
+[node name="Base_Floor" type="TileMapLayer" parent="NavigationRegion2D"]
+z_index = -1
+tile_set = ExtResource("20_tileset")
+
+[node name="Walls" type="TileMapLayer" parent="NavigationRegion2D"]
+y_sort_enabled = true
+tile_set = ExtResource("20_tileset")
+
+[node name="Hazards" type="TileMapLayer" parent="NavigationRegion2D"]
+y_sort_enabled = true
+tile_set = ExtResource("20_tileset")
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Chest_Interactive" type="StaticBody2D" parent="Props"]
+position = Vector2(400, 32)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("6_chest_script")
+interactable_id = &"chest_interactive"
+requires_key = true
+heal_amount = 25
+texture_closed = ExtResource("16_chest_closed")
+texture_open = ExtResource("16b_chest_open")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Chest_Interactive"]
+position = Vector2(0, 4)
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Chest_Interactive"]
+texture = ExtResource("16_chest_closed")
+
+[node name="Lever_RightRoom" type="StaticBody2D" parent="Props"]
+position = Vector2(460, 100)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_lever_script")
+entrance_id = &"entrance_1"
+one_shot = false
+texture_off = ExtResource("15_lever_off")
+texture_on = ExtResource("15b_lever_on")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Lever_RightRoom"]
+position = Vector2(0, 4)
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Lever_RightRoom"]
+texture = ExtResource("15_lever_off")
+
+[node name="Entrance_Door_1" type="StaticBody2D" parent="Props"]
+position = Vector2(316, 140)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("8_door_script")
+entrance_id = &"entrance_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Entrance_Door_1"]
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Entrance_Door_1"]
+texture = ExtResource("15_lever_off")
+
+[node name="Chest_BossRoom" type="StaticBody2D" parent="Props"]
+position = Vector2(312, 440)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("6_chest_script")
+interactable_id = &"chest_boss_room"
+requires_key = true
+heal_amount = 0
+texture_closed = ExtResource("16_chest_closed")
+texture_open = ExtResource("16b_chest_open")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Chest_BossRoom"]
+position = Vector2(0, 4)
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Chest_BossRoom"]
+texture = ExtResource("16_chest_closed")
+
+[node name="Lever_Treasure" type="StaticBody2D" parent="Props"]
+position = Vector2(520, 100)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_lever_script")
+entrance_id = &"treasure_door"
+one_shot = false
+texture_off = ExtResource("15_lever_off")
+texture_on = ExtResource("15b_lever_on")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Lever_Treasure"]
+position = Vector2(0, 4)
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Lever_Treasure"]
+texture = ExtResource("15_lever_off")
+
+[node name="Door_Treasure" type="StaticBody2D" parent="Props"]
+position = Vector2(580, 100)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("8_door_script")
+entrance_id = &"treasure_door"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Door_Treasure"]
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Door_Treasure"]
+texture = ExtResource("15_lever_off")
+
+[node name="Chest_Treasure_01" type="StaticBody2D" parent="Props"]
+position = Vector2(620, 80)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("6_chest_script")
+interactable_id = &"chest_treasure_01"
+requires_key = false
+heal_amount = 50
+texture_closed = ExtResource("16_chest_closed")
+texture_open = ExtResource("16b_chest_open")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Chest_Treasure_01"]
+position = Vector2(0, 4)
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Chest_Treasure_01"]
+texture = ExtResource("16_chest_closed")
+
+[node name="Chest_Treasure_02" type="StaticBody2D" parent="Props"]
+position = Vector2(620, 120)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("6_chest_script")
+interactable_id = &"chest_treasure_02"
+requires_key = false
+heal_amount = 50
+texture_closed = ExtResource("16_chest_closed")
+texture_open = ExtResource("16b_chest_open")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Chest_Treasure_02"]
+position = Vector2(0, 4)
+shape = SubResource("PropShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/Chest_Treasure_02"]
+texture = ExtResource("16_chest_closed")
+
+[node name="Traps" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Spike_Corridor" type="Area2D" parent="Traps"]
+position = Vector2(316, 300)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("9_trap_script")
+safe_duration = 2.0
+active_duration = 2.0
+start_active = false
+texture_idle = ExtResource("18_spike_idle")
+texture_active = ExtResource("18b_spike_active")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Traps/Spike_Corridor"]
+shape = SubResource("TrapShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Traps/Spike_Corridor"]
+texture = ExtResource("18_spike_idle")
+
+[node name="CycleTimer" type="Timer" parent="Traps/Spike_Corridor"]
+wait_time = 2.0
+one_shot = false
+autostart = true
+
+[node name="DamageTimer" type="Timer" parent="Traps/Spike_Corridor"]
+wait_time = 0.5
+one_shot = false
+
+[node name="Spike_Trap_Active" type="Area2D" parent="Traps"]
+position = Vector2(370, 270)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("9_trap_script")
+safe_duration = 1.5
+active_duration = 2.0
+start_active = true
+texture_idle = ExtResource("18_spike_idle")
+texture_active = ExtResource("18b_spike_active")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Traps/Spike_Trap_Active"]
+shape = SubResource("TrapShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Traps/Spike_Trap_Active"]
+texture = ExtResource("18b_spike_active")
+
+[node name="CycleTimer" type="Timer" parent="Traps/Spike_Trap_Active"]
+wait_time = 2.0
+one_shot = false
+autostart = true
+
+[node name="DamageTimer" type="Timer" parent="Traps/Spike_Trap_Active"]
+wait_time = 0.5
+one_shot = false
+
+[node name="Pitfall_TopLeft" type="Area2D" parent="Traps"]
+position = Vector2(56, 200)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("10_pitfall_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Traps/Pitfall_TopLeft"]
+shape = SubResource("PitShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Traps/Pitfall_TopLeft"]
+texture = ExtResource("19_pitfall_tex")
+
+[node name="Pitfall_BossRoom" type="Area2D" parent="Traps"]
+position = Vector2(360, 440)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("10_pitfall_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Traps/Pitfall_BossRoom"]
+shape = SubResource("PitShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Traps/Pitfall_BossRoom"]
+texture = ExtResource("19_pitfall_tex")
+
+[node name="Spike_Transition_01" type="Area2D" parent="Traps"]
+position = Vector2(130, -100)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("9_trap_script")
+safe_duration = 2.0
+active_duration = 2.0
+start_active = false
+texture_idle = ExtResource("18_spike_idle")
+texture_active = ExtResource("18b_spike_active")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Traps/Spike_Transition_01"]
+shape = SubResource("TrapShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Traps/Spike_Transition_01"]
+texture = ExtResource("18_spike_idle")
+
+[node name="CycleTimer" type="Timer" parent="Traps/Spike_Transition_01"]
+wait_time = 2.0
+one_shot = false
+autostart = true
+
+[node name="DamageTimer" type="Timer" parent="Traps/Spike_Transition_01"]
+wait_time = 0.5
+one_shot = false
+
+[node name="Spike_Transition_02" type="Area2D" parent="Traps"]
+position = Vector2(170, -100)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("9_trap_script")
+safe_duration = 2.0
+active_duration = 2.0
+start_active = true
+texture_idle = ExtResource("18_spike_idle")
+texture_active = ExtResource("18b_spike_active")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Traps/Spike_Transition_02"]
+shape = SubResource("TrapShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Traps/Spike_Transition_02"]
+texture = ExtResource("18b_spike_active")
+
+[node name="CycleTimer" type="Timer" parent="Traps/Spike_Transition_02"]
+wait_time = 2.0
+one_shot = false
+autostart = true
+
+[node name="DamageTimer" type="Timer" parent="Traps/Spike_Transition_02"]
+wait_time = 0.5
+one_shot = false
+
+[node name="Pitfall_Transition_01" type="Area2D" parent="Traps"]
+position = Vector2(150, -140)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("10_pitfall_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Traps/Pitfall_Transition_01"]
+shape = SubResource("PitShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Traps/Pitfall_Transition_01"]
+texture = ExtResource("19_pitfall_tex")
+
+[node name="Enemies" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Goblin_01" type="CharacterBody2D" parent="Enemies"]
+position = Vector2(168, 136)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("3_enemy_script")
+max_health = 30
+move_speed = 55.0
+attack_damage = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Goblin_01"]
+texture = ExtResource("13_goblin_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_01"]
+position = Vector2(0, 6)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Goblin_01"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_01/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Goblin_01"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_01/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="Goblin_02" type="CharacterBody2D" parent="Enemies"]
+position = Vector2(400, 80)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("3_enemy_script")
+max_health = 30
+move_speed = 55.0
+attack_damage = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Goblin_02"]
+texture = ExtResource("13_goblin_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_02"]
+position = Vector2(0, 6)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Goblin_02"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_02/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Goblin_02"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_02/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="Goblin_03" type="CharacterBody2D" parent="Enemies"]
+position = Vector2(460, 60)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("3_enemy_script")
+max_health = 30
+move_speed = 55.0
+attack_damage = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Goblin_03"]
+texture = ExtResource("13_goblin_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_03"]
+position = Vector2(0, 6)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Goblin_03"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_03/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Goblin_03"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_03/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="Goblin_Ambush_01" type="CharacterBody2D" parent="Enemies"]
+position = Vector2(-220, 130)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("3_enemy_script")
+max_health = 30
+move_speed = 55.0
+attack_damage = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Goblin_Ambush_01"]
+texture = ExtResource("13_goblin_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_01"]
+position = Vector2(0, 6)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Goblin_Ambush_01"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_01/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Goblin_Ambush_01"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_01/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="Goblin_Ambush_02" type="CharacterBody2D" parent="Enemies"]
+position = Vector2(-180, 130)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("3_enemy_script")
+max_health = 30
+move_speed = 55.0
+attack_damage = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Goblin_Ambush_02"]
+texture = ExtResource("13_goblin_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_02"]
+position = Vector2(0, 6)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Goblin_Ambush_02"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_02/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Goblin_Ambush_02"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_02/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="Goblin_Ambush_03" type="CharacterBody2D" parent="Enemies"]
+position = Vector2(-220, 170)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("3_enemy_script")
+max_health = 30
+move_speed = 55.0
+attack_damage = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Goblin_Ambush_03"]
+texture = ExtResource("13_goblin_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_03"]
+position = Vector2(0, 6)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Goblin_Ambush_03"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_03/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Goblin_Ambush_03"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_03/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="Goblin_Ambush_04" type="CharacterBody2D" parent="Enemies"]
+position = Vector2(-180, 170)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("3_enemy_script")
+max_health = 30
+move_speed = 55.0
+attack_damage = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Goblin_Ambush_04"]
+texture = ExtResource("13_goblin_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_04"]
+position = Vector2(0, 6)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Goblin_Ambush_04"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_04/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Goblin_Ambush_04"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Goblin_Ambush_04/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="StrongGoblin_01" parent="Enemies" instance=ExtResource("22_strong_goblin")]
+position = Vector2(80, 300)
+
+[node name="StrongGoblin_02" parent="Enemies" instance=ExtResource("22_strong_goblin")]
+position = Vector2(650, 100)
+
+[node name="Boss" type="CharacterBody2D" parent="Enemies" groups=["boss", "enemies"]]
+position = Vector2(312, 384)
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("23_knight_script")
+max_health = 250
+move_speed = 40.0
+attack_damage = 30
+detection_range = 200.0
+attack_range = 45.0
+key_scene = ExtResource("21_key_scene")
+shockwave_scene = ExtResource("24_shock_scene")
+shockwave_count = 3
+telegraph_duration = 1.5
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemies/Boss"]
+texture = ExtResource("14_boss_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Boss"]
+position = Vector2(0, 8)
+shape = SubResource("EnemyCollision")
+
+[node name="DetectionArea" type="Area2D" parent="Enemies/Boss"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Boss/DetectionArea"]
+shape = SubResource("EnemyDetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="Enemies/Boss"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemies/Boss/AttackArea"]
+shape = SubResource("EnemyAttackShape")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(128, 128)
+collision_layer = 2
+collision_mask = 13
+motion_mode = 1
+script = ExtResource("1_player_script")
+max_health = 100
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("12_player_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 6)
+shape = SubResource("PlayerCollision")
+
+[node name="InteractionArea" type="Area2D" parent="Player"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/InteractionArea"]
+shape = SubResource("PlayerInteractionShape")
+
+[node name="PlayerCamera" type="Camera2D" parent="Player"]
+script = ExtResource("2_camera_script")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("11_hud_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+anchors_preset = 0
+offset_right = 200.0
+offset_bottom = 24.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer"]
+layout_mode = 2
+
+[node name="DamageBar" type="ProgressBar" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(180, 10)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(180, 8)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="CoinLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Moedas: 0"
+
+[node name="KeyLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Chaves: 0"
+
+[node name="ArrowLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Flechas: 15"
