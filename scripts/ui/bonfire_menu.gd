@@ -1,5 +1,4 @@
 ## Bonfire Menu UI — Allows player to buy upgrades.
-class_name BonfireMenu
 extends CanvasLayer
 
 @onready var coin_label: Label = %CoinLabel
