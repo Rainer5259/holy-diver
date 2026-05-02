@@ -10,7 +10,16 @@ var max_stamina: float = 100.0
 var current_stamina: float = 100.0
 
 # ── Progression ──────────────────────────────────────────────────────────────
-var coins: int = 0
+var coins: int = 0:
+	set(value):
+		coins = value
+		GameEvents.coins_changed.emit(coins)
+
+var keys: int = 0:
+	set(value):
+		keys = value
+		GameEvents.keys_changed.emit(keys)
+
 var level: int = 1
 
 # ── Persistence ──────────────────────────────────────────────────────────────

@@ -18,6 +18,7 @@ func _ready() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if not body.is_in_group(&"player"):
 		return
+	GameManager.keys += 1
 	GameEvents.key_collected.emit()
 	set_deferred("monitoring", false)
 

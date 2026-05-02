@@ -29,11 +29,12 @@
 | P10 | Fix: Startup e Tileset | `fix/tileset-and-signals` | ✅ Finished |
 | P11 | Fix: Respawn e Objetivos | `fix/respawn-and-objectives` | ✅ Finished |
 | S2.1 | Drop de Moedas | `feat/s2-coin-drop` | ✅ Finished |
+| S2.2 | Contadores na HUD | `feat/s2-hud-counters` | ✅ Finished |
 
-## S2.1: Drop de Moedas - Detalhes Técnicos
-- **Coin.tscn/gd**: Criado sistema de moedas com animação de "pulo" ao nascer e atração magnética para o jogador.
-- **Enemy.gd / Crate.gd**: Integrada a lógica de drop automático. Inimigos dropam 1 moeda por padrão, e caixas dropam 3.
-- **GameManager**: Sincronizado para acumular o valor das moedas coletadas.
+## S2.2: Contadores na HUD - Detalhes Técnicos
+- **GameManager**: Adicionada lógica de rastreio de chaves (`keys`) com emissão de sinais automática.
+- **HUD (HealthBar.gd)**: Expandido para exibir contadores de moedas e chaves em tempo real.
+- **Interactables**: Atualizados `KeyItem.gd` e `Chest.gd` para utilizar o sistema centralizado de chaves no `GameManager`.
 
 ## P11: Fix: Respawn e Objetivos - Detalhes Técnicos
 - **Player.gd**: Implementada lógica de reset de cena (`reload_current_scene`) após a animação de morte, garantindo que o jogador possa tentar novamente.

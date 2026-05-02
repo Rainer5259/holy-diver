@@ -391,3 +391,15 @@ layout_mode = 2
 max_value = 100.0
 value = 100.0
 show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="CoinLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Moedas: 0"
+
+[node name="KeyLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Chaves: 0"

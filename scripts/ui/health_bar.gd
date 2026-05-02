@@ -4,11 +4,29 @@ extends CanvasLayer
 
 @onready var bar: ProgressBar = $MarginContainer/VBoxContainer/HealthBar
 @onready var damage_bar: ProgressBar = $MarginContainer/VBoxContainer/DamageBar
+@onready var coin_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/CoinLabel
+@onready var key_label: Label = $MarginContainer/VBoxContainer/HBoxContainer/KeyLabel
 
 
 func _ready() -> void:
 	GameEvents.player_health_changed.connect(_on_health_changed)
 	GameEvents.player_died.connect(_on_player_died)
+	GameEvents.coins_changed.connect(_on_coins_changed)
+	GameEvents.keys_changed.connect(_on_keys_changed)
+	
+	# Initial values
+	_on_coins_changed(GameManager.coins)
+	_on_keys_changed(GameManager.keys)
+
+
+func _on_coins_changed(new_amount: int) -> void:
+	if coin_label:
+		coin_label.text = "Moedas: " + str(new_amount)
+
+
+func _on_keys_changed(new_amount: int) -> void:
+	if key_label:
+		key_label.text = "Chaves: " + str(new_amount)
 
 
 func _on_health_changed(current: int, maximum: int) -> void:
