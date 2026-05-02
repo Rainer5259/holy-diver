@@ -2,12 +2,14 @@
 
 ## Git Workflow
 - **Branching**: Every task must be implemented in a dedicated branch.
-- **Naming Convention**:
+- **Naming Convention**: Use the pattern `type/task-description` (e.g., `feat/p2-combat-dodge`).
     - `feat/`: New features.
     - `refactor/`: Code improvements without changing behavior.
     - `chore/`: Maintenance, configuration, or documentation.
     - `fix/`: Bug fixes.
+- **Documentation Rule**: All implementation details, logic changes, and created hooks MUST be documented in this file (or a specific CHANGELOG) within the branch **before** the final commit.
 - **Commits**: Use descriptive messages following the `type: description` pattern.
+- **Push**: After committing, push the branch to the remote repository using `git push origin branch-name`.
 
 ## Safety & Security
 - **Destructive Commands**: AI Agents are prohibited from using commands like `git clean -fdX`, `git reset --hard` (without confirmation), or `rm -rf` on critical directories. See [AGENTS.md](./AGENTS.md) for full safety protocols.
