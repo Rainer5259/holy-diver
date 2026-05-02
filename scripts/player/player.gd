@@ -17,6 +17,7 @@ extends CharacterBody2D
 @export var dodge_stamina_cost: float = 30.0
 @export var attack_stamina_cost: float = 15.0
 @export var shoot_stamina_cost: float = 20.0
+@export var auto_jump_stamina_cost: float = 10.0
 
 # ── Combat ───────────────────────────────────────────────────────────────────
 @export_group("Combat")
@@ -230,9 +231,14 @@ func _update_facing(direction: Vector2) -> void:
 
 ## Called by pitfall hazard areas.
 func fall_into_pit() -> void:
-	if _is_dead:
+	if _is_dead or _invincible_timer > 0.0:
 		return
 	
+	# Auto-jump logic: trigger if speed > 80% of max and has enough stamina
+	if velocity.length() > (max_speed * 0.8) and current_stamina >= auto_jump_stamina_cost:
+		_perform_auto_jump()
+		return
+
 	_is_dead = true
 	velocity = Vector2.ZERO
 	
@@ -245,6 +251,20 @@ func fall_into_pit() -> void:
 	tween.chain().tween_callback(func():
 		current_health = 0
 	)
+
+
+func _perform_auto_jump() -> void:
+	current_stamina -= auto_jump_stamina_cost
+	_invincible_timer = 0.3
+	
+	var tween := create_tween().set_parallel(true)
+	# Visual jump: move sprite up and scale it
+	tween.tween_property(sprite, "position:y", -12.0, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	
+	tween.chain().set_parallel(true)
+	tween.tween_property(sprite, "position:y", 0.0, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(sprite, "scale", Vector2(1.0, 1.0), 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
 ## Apply damage with brief invincibility frames.

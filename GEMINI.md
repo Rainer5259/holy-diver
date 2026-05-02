@@ -33,6 +33,14 @@
 | S2.3 | IA de Mobs Fortes | `feat/s2-strong-mob-ai` | ✅ Finished |
 | S2.4 | Polimento e Mapa | `feat/s2-final-polish` | ✅ Finished |
 | S3.1 | Menu da Fogueira | `feat/s3-bonfire-ui` | ✅ Finished |
+| S3.2 | Pulo Automático | `feat/s3-auto-jump` | ✅ Finished |
+
+## S3.2: Pulo Automático - Detalhes Técnicos
+- **Player.gd**: Implementada a lógica de "Pulo Automático" em `fall_into_pit`.
+- **Condição de Trigger**: O pulo é ativado se a velocidade do jogador for superior a 80% de `max_speed` e se houver pelo menos 10 de estamina disponível.
+- **Efeito Visual**: Criado um Tween que simula um pulo (deslocamento em Y e escala) durante 0.3s.
+- **Invulnerabilidade**: O jogador ganha 0.3s de invencibilidade (`_invincible_timer`) ao saltar, permitindo atravessar o buraco.
+- **Pitfall.gd**: Refatorada a detecção para `_physics_process` com `get_overlapping_bodies()`, garantindo que se o jogador parar ou perder velocidade sobre o buraco após o pulo, ele cairá.
 
 ## S3.1: Menu da Fogueira - Detalhes Técnicos
 - **BonfireMenu.tscn**: Criada a interface interativa (`CanvasLayer`) para evolução de atributos do jogador.
