@@ -22,4 +22,10 @@
 | P3 | Interação de Mapa | `feat/p3-map-interaction` | ✅ Finished |
 | P4 | Sistema de Riscos | `feat/p4-hazard-system` | ✅ Finished |
 | P5 | Evolução (Fogueira)| `feat/p5-progression-system` | ✅ Finished |
-| P6 | HUD e Feedback | - | ⏳ Pending |
+| P6 | HUD e Feedback | `feat/p6-hud-feedback` | ✅ Finished |
+
+## P6: HUD e Feedback - Detalhes Técnicos
+- **StaminaBar.gd**: Criada lógica para barra de estamina com sinal visual de esgotamento (flash vermelho).
+- **HealthBar.gd**: Validada lógica existente de "bleed effect" (barra de dano que segue a vida).
+- **Feedback Visual**: Implementados sinais visuais para cura, dano e upgrades nas fogueiras via Tweens.
+
