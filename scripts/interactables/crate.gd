@@ -3,7 +3,8 @@ class_name Crate
 extends Interactable
 
 @export_group("Crate")
-@export var loot_scene: PackedScene
+@export var loot_scene: PackedScene = preload("res://scenes/interactables/coin.tscn")
+@export var loot_count: int = 3
 @export var is_breakable: bool = true
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -27,9 +28,10 @@ func _open() -> void:
 
 func _spawn_loot() -> void:
 	if loot_scene:
-		var loot = loot_scene.instantiate() as Node2D
-		loot.global_position = global_position
-		get_parent().add_child(loot)
+		for i in range(loot_count):
+			var loot = loot_scene.instantiate() as Node2D
+			get_parent().add_child(loot)
+			loot.global_position = global_position
 	
 	GameEvents.object_broken.emit(interactable_id)
 	queue_free()
