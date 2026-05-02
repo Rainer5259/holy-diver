@@ -24,6 +24,10 @@
 | P5 | Evolução (Fogueira)| `feat/p5-progression-system` | ✅ Finished |
 | P6 | HUD e Feedback | `feat/p6-hud-feedback` | ✅ Finished |
 | P7 | Recheck e Refinamento | `fix/system-refinements` | ✅ Finished |
+| P8 | Fix: GameManager Vars | `fix/gamemanager-missing-vars` | ✅ Finished |
+
+## P8: Fix: GameManager Vars - Detalhes Técnicos
+- **GameManager.gd**: Adicionadas as declarações de `coins` e `level` que foram acidentalmente removidas durante uma refatoração anterior.
 
 ## P7: Recheck e Refinamento - Detalhes Técnicos
 - **Player.gd**: Refatorados getters/setters de atributos para evitar recursão infinita e garantir sincronia com `GameManager`.

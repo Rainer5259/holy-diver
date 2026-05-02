@@ -9,6 +9,10 @@ var current_health: int = 100
 var max_stamina: float = 100.0
 var current_stamina: float = 100.0
 
+# ── Progression ──────────────────────────────────────────────────────────────
+var coins: int = 0
+var level: int = 1
+
 # ── Persistence ──────────────────────────────────────────────────────────────
 const SAVE_PATH = "user://savegame.cfg"
 
