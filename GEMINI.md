@@ -25,9 +25,10 @@
 | P6 | HUD e Feedback | `feat/p6-hud-feedback` | ✅ Finished |
 | P7 | Recheck e Refinamento | `fix/system-refinements` | ✅ Finished |
 | P8 | Fix: GameManager Vars | `fix/gamemanager-missing-vars` | ✅ Finished |
+| P9 | Config: Godot MCP | `chore/configure-godot-mcp` | ✅ Finished |
 
-## P8: Fix: GameManager Vars - Detalhes Técnicos
-- **GameManager.gd**: Adicionadas as declarações de `coins` e `level` que foram acidentalmente removidas durante uma refatoração anterior.
+## P9: Config: Godot MCP - Detalhes Técnicos
+- **.cursor/mcp.json**: Configurado o servidor MCP para Godot utilizando o binário localizado em `/Applications/Godot.app/Contents/MacOS/Godot`.
 
 ## P7: Recheck e Refinamento - Detalhes Técnicos
 - **Player.gd**: Refatorados getters/setters de atributos para evitar recursão infinita e garantir sincronia com `GameManager`.
