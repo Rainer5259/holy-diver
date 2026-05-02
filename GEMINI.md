@@ -32,6 +32,14 @@
 | S2.2 | Contadores na HUD | `feat/s2-hud-counters` | ✅ Finished |
 | S2.3 | IA de Mobs Fortes | `feat/s2-strong-mob-ai` | ✅ Finished |
 | S2.4 | Polimento e Mapa | `feat/s2-final-polish` | ✅ Finished |
+| S3.1 | Menu da Fogueira | `feat/s3-bonfire-ui` | ✅ Finished |
+
+## S3.1: Menu da Fogueira - Detalhes Técnicos
+- **BonfireMenu.tscn**: Criada a interface interativa (`CanvasLayer`) para evolução de atributos do jogador.
+- **BonfireMenu.gd**: Implementada a lógica de compra de upgrades de Vida e Estamina, conectada diretamente ao `GameManager`.
+- **GameEvents**: O menu escuta o sinal `bonfire_rested` para abrir automaticamente e pausa o jogo durante a navegação.
+- **Autoload**: `BonfireMenu` adicionado como autoload para garantir disponibilidade global e desacoplamento total dos objetos de fogueira.
+- **Bonfire.gd**: Removida a lógica de auto-upgrade temporária, mantendo apenas a cura e o salvamento antes de disparar o sinal da UI.
 
 ## S2.4: Polimento e Mapa - Detalhes Técnicos
 - **Navigation**: Área de navegação expandida para cobrir todo o mapa de teste (2500x2500px).

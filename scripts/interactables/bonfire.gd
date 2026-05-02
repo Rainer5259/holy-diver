@@ -22,17 +22,3 @@ func _on_interact(instigator: Node2D) -> void:
 	
 	# Emit event for UI or other systems
 	GameEvents.bonfire_rested.emit()
-	
-	# Simulate an upgrade if player has enough coins (for the prototype)
-	_auto_upgrade()
-
-
-func _auto_upgrade() -> void:
-	# In a real game, this would be a UI menu
-	if GameManager.coins >= health_upgrade_cost:
-		if GameManager.upgrade_health(health_upgrade_cost, 20):
-			print("Upgraded Health!")
-	
-	if GameManager.coins >= stamina_upgrade_cost:
-		if GameManager.upgrade_stamina(stamina_upgrade_cost, 20.0):
-			print("Upgraded Stamina!")
