@@ -26,9 +26,11 @@
 | P7 | Recheck e Refinamento | `fix/system-refinements` | ✅ Finished |
 | P8 | Fix: GameManager Vars | `fix/gamemanager-missing-vars` | ✅ Finished |
 | P9 | Config: Godot MCP | `chore/configure-godot-mcp` | ✅ Finished |
+| P10 | Fix: Startup e Tileset | `fix/tileset-and-signals` | ✅ Finished |
 
-## P9: Config: Godot MCP - Detalhes Técnicos
-- **.cursor/mcp.json**: Configurado o servidor MCP para Godot utilizando o binário localizado em `/Applications/Godot.app/Contents/MacOS/Godot`.
+## P10: Fix: Startup e Tileset - Detalhes Técnicos
+- **dungeon_tileset.tres**: Corrigida estrutura do recurso que tentava instanciar uma classe inexistente (`PhysicsLayer`), movendo as propriedades de física diretamente para o recurso principal do TileSet.
+- **game_events.gd**: Silenciados os avisos de "sinal não utilizado" usando anotações `# @warning_ignore`, pois são sinais de um barramento global (Event Bus) e o Godot às vezes falha em detectar seu uso dinâmico em outros arquivos.
 
 ## P7: Recheck e Refinamento - Detalhes Técnicos
 - **Player.gd**: Refatorados getters/setters de atributos para evitar recursão infinita e garantir sincronia com `GameManager`.
